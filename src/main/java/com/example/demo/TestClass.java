@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -21,6 +22,12 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 @WebMvcTest(BricksController.class)
 public class TestClass {
 
+	@Autowired
+    private TestEntityManager entityManager;
+	
+	@Autowired
+    private BrickRepository brickRepository;
+	
 	//Media Type for request
 	public static final MediaType APPLICATION_JSON_UTF8 = new MediaType(
 			MediaType.APPLICATION_JSON.getType(),
@@ -49,13 +56,14 @@ public class TestClass {
 		
 		//equals that 'getnumBricks' returns the value set in 'setBricks' method
 		assertEquals("10", b.getnumBricks());
-		
+
 		//the create method order returns a unique reference
-		BricksController bc = new BricksController();
+		BricksController bc = new BricksController(brickRepository);
 		long test = bc.createOrder(b);
+		assertEquals(1, test);
 		assertNotNull(test);
 		
-	}
+	} 
 	
 	//test for web call out using mock 
 	@Test

@@ -19,6 +19,7 @@ public class Bricks {
    
     }
     
+    
     //set Id when creating order
     public void setId(final long id) {
 		this.id = id;
